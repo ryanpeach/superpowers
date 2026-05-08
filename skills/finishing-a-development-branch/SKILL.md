@@ -177,6 +177,7 @@ gh pr merge <PR-number> --merge
 git push origin --delete <feature-branch>
 git checkout <base-branch>
 git pull
+git branch -d <feature-branch>
 ```
 
 If no: Report "PR is open at <url>. Branch preserved." Done.
