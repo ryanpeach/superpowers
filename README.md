@@ -52,12 +52,12 @@ Superpowers is available via the [official Claude plugin marketplace](https://cl
   /plugin marketplace add ryanpeach/superpowers
   ```
 
-  This registers a marketplace named `superpowers-dev` (defined in the repo's `marketplace.json`).
+  This registers a marketplace named `ryanpeach` (defined in the repo's `marketplace.json`).
 
 - Install the plugin:
 
   ```bash
-  /plugin install superpowers@superpowers-dev
+  /plugin install superpowers@ryanpeach
   ```
 
 #### Superpowers Marketplace
@@ -107,7 +107,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Register the marketplace:
 
   ```bash
-  droid plugin marketplace add https://github.com/obra/superpowers
+  droid plugin marketplace add https://github.com/ryanpeach/superpowers
   ```
 
 - Install the plugin:
@@ -121,7 +121,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the extension:
 
   ```bash
-  gemini extensions install https://github.com/obra/superpowers
+  gemini extensions install https://github.com/ryanpeach/superpowers
   ```
 
 - Update later:
@@ -138,7 +138,7 @@ already use it in another harness.
 - Tell OpenCode:
 
   ```
-  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/ryanpeach/superpowers/refs/heads/main/.opencode/INSTALL.md
   ```
 
 - Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
@@ -245,5 +245,5 @@ MIT License - see LICENSE file for details
 Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).
 
 - **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers
-- **Issues**: https://github.com/obra/superpowers/issues
+- **Issues**: https://github.com/ryanpeach/superpowers/issues
 - **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions
