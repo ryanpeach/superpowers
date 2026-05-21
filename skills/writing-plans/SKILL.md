@@ -22,6 +22,20 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
+## Choose Execution Mode (Before Drafting Tasks)
+
+Confirm how the plan will be executed **before** writing tasks. The answer determines whether you include DAG metadata (`depends_on`, `parallel_safe`) and a Parallelism analysis, and shapes task decomposition itself.
+
+**Default: parallel (subagent-driven).** Plans run via `superpowers:subagent-driven-development` — one backgrounded subagent per ready task in its own worktree. Write tasks with `depends_on` / `parallel_safe` metadata, follow the Plan Design Heuristic below, and end with a Parallelism analysis section.
+
+**Fallback: sequential single-session.** Only when the harness has no subagent support, or your human partner explicitly asks for sequential execution. Plans run via `superpowers:executing-plans` — one task at a time, foreground. DAG metadata and Parallelism analysis may be omitted.
+
+Ask your human partner before drafting tasks:
+
+> "I'll write this plan for parallel subagent execution by default — DAG-aware, one subagent per task. If you'd rather have sequential single-session execution, tell me now so I can write the plan for that instead. Default: parallel?"
+
+Record the answer and design the plan accordingly. Do not re-ask at handoff time.
+
 ## File Structure
 
 Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
@@ -49,7 +63,7 @@ This structure informs the task decomposition. Each task should produce self-con
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (default — parallel DAG-aware execution). Fall back to superpowers:executing-plans only when subagents are unavailable or the human partner asked for sequential execution. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -68,7 +82,7 @@ This structure informs the task decomposition. Each task should produce self-con
 - `depends_on`: list of task ids this task waits on. Empty (`[]`) means it can start immediately. Omit if no other task uses `depends_on`.
 - `parallel_safe`: `true` (default) or `false`. Set `false` only for genuinely global state (env files, DB migrations, config singletons). Most apparent conflicts should be resolved by adding a dependency instead.
 
-When omitted entirely across every task, the plan runs in sequential back-compat mode.
+Omit these fields only for plans written for sequential execution (the `executing-plans` fallback). Parallel plans (the default) must include them.
 
 ````markdown
 ### Task N: [Component Name]
@@ -177,20 +191,12 @@ Only proceed to the execution handoff once the user has approved the plan on the
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+The execution mode was decided up front (see "Choose Execution Mode" above). Do not re-ask — announce the handoff and proceed.
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
-
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
-
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
-
-**Which approach?"**
-
-**If Subagent-Driven chosen:**
+**Parallel (default):**
 - **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
+- One backgrounded subagent per ready task in its own worktree, with per-task spec compliance and code-quality review
 
-**If Inline Execution chosen:**
+**Sequential (fallback only):**
 - **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Batch execution with checkpoints for review
+- One task at a time in this session, with checkpoints for review
