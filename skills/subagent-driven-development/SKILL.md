@@ -1,6 +1,6 @@
 ---
 name: subagent-driven-development
-description: Use when executing implementation plans with a task DAG. Default flow dispatches one backgrounded subagent per ready task into its own git worktree (parallel-by-default). Falls back to sequential for plans without `depends_on`.
+description: Use when executing implementation plans with a task DAG. Dispatches one backgrounded subagent per ready task into its own git worktree (parallel-by-default).
 ---
 
 # Subagent-Driven Development
@@ -15,7 +15,7 @@ Execute a plan by dispatching one backgrounded subagent per ready task into its 
 
 ## When to Use
 
-Default execution path for any plan with task `depends_on` metadata. For plans without `depends_on` declared on any task, see the **Sequential Mode** subsection below.
+Execution path for any plan with task `depends_on` metadata. Plans written without `depends_on` are sequential-mode plans and belong to `superpowers:executing-plans` instead — do not run them through this skill.
 
 ## The Process
 
@@ -107,10 +107,6 @@ The implementer prompt instructs the worktree subagent to run the full review pi
 5. Return DONE to controller
 
 The controller never sees per-task review status — only the final pipeline status. Reviewer subagents are explicitly forbidden from escalating to the human (see reviewer prompts).
-
-### Sequential Mode (fallback)
-
-When the plan declares no `depends_on` on any task, run the original sequential flow: one task at a time, foreground, with per-task spec review and code-quality review surfaced to the controller. Use this for plans written before the DAG format existed and for any plan whose author chose pure sequential.
 
 ### Permissions Handling
 
@@ -326,5 +322,5 @@ Done!
 **Subagents should use:**
 - **superpowers:test-driven-development** - Subagents follow TDD for each task
 
-**Alternative workflow:**
-- **superpowers:executing-plans** - Use for parallel session instead of same-session execution
+**Fallback workflow (no subagents available):**
+- **superpowers:executing-plans** - Sequential single-session execution for harnesses without subagent support
